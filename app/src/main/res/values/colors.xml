@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_cyan">#00D9FF</color>
+    <color name="secondary_purple">#7C4DFF</color>
+    <color name="accent_pink">#FF6B9D</color>
+    
+    <color name="background_dark">#0D0D1A</color>
+    <color name="header_dark">#1A1A2E</color>
+    <color name="input_background">#16162B</color>
+    
+    <color name="user_message_bg">#00A8CC</color>
+    <color name="ai_message_bg">#252547</color>
+    
+    <color name="white">#FFFFFF</color>
+    <color name="ai_text">#E8E8F0</color>
+    <color name="hint_gray">#666688</color>
+    <color name="label_gray">#888899</color>
+    <color name="time_light">#AADDEE</color>
+    <color name="time_dark">#777799</color>
+    <color name="typing_gray">#888899</color>
+    <color name="error_red">#FF4757</color>
+    
+    <color name="black">#000000</color>
+</resources>

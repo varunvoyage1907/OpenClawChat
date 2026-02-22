@@ -1,0 +1,90 @@
+[
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/layout_item_message_user.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/layout/item_message_user.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_bg_send_button.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/bg_send_button.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/xml_backup_rules.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_volume_off.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_volume_off.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/xml_data_extraction_rules.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_back.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_back.xml"
+    },
+    {
+        "merged": "com.openclaw.chat.app-merged_res-37:/layout_activity_main.xml.flat",
+        "source": "com.openclaw.chat.app-main-39:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/layout_item_message_ai.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/layout/item_message_ai.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/layout_activity_main.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/layout_activity_settings.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_volume_on.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_volume_on.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_mic.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_mic.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_send.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_send.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/mipmap-hdpi_ic_launcher_round.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/mipmap-hdpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_clear.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_clear.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_bg_listening.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/bg_listening.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_bg_input.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/bg_input.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_bg_voice_button.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/bg_voice_button.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_mic_active.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_mic_active.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/mipmap-hdpi_ic_launcher.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/mipmap-hdpi/ic_launcher.xml"
+    },
+    {
+        "merged": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-merged_res-37:/drawable_ic_settings.xml.flat",
+        "source": "/Users/varunagarwal/.gradle/daemon/8.2/com.openclaw.chat.app-main-39:/drawable/ic_settings.xml"
+    }
+]
