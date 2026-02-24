@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark">
+    android:background="@color/background_dark"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,8 +25,7 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_back"
-                app:tint="@color/white"
-                xmlns:app="http://schemas.android.com/apk/res-auto" />
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,6 +36,16 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <!-- ==================== OpenClaw Section ==================== -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OpenClaw Connection"
+            android:textColor="@color/primary_cyan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
         <!-- OpenClaw URL -->
         <TextView
@@ -61,7 +72,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Auth Token (optional)"
+            android:text="Gateway Token"
             android:textColor="@color/label_gray"
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
@@ -71,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_input"
-            android:hint="Bearer token if required"
+            android:hint="Your OpenClaw gateway token"
             android:inputType="textPassword"
             android:padding="14dp"
             android:textColor="@color/white"
@@ -87,7 +98,6 @@
             android:textColor="@color/white"
             app:backgroundTint="@color/secondary_purple"
             app:cornerRadius="8dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_marginBottom="8dp" />
 
         <TextView
@@ -98,7 +108,148 @@
             android:textSize="13sp"
             android:layout_marginBottom="24dp" />
 
-        <!-- System Prompt -->
+        <!-- ==================== Sarvam AI Section ==================== -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_dark"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sarvam AI (Voice)"
+            android:textColor="@color/primary_cyan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Natural Indian voice for STT &amp; TTS"
+            android:textColor="@color/hint_gray"
+            android:textSize="12sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Sarvam API Key -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sarvam AI API Key"
+            android:textColor="@color/label_gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etSarvamApiKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input"
+            android:hint="sk_xxxxxxxx_xxxxxxxxxxxxxxxxxxxxxx"
+            android:inputType="textPassword"
+            android:padding="14dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_gray"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Voice Selection -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voice (Bulbul v3)"
+            android:textColor="@color/label_gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerVoice"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_spinner"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Default Language -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Default Language (for text chat)"
+            android:textColor="@color/label_gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_spinner"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Speech Pace -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Speech Pace"
+                android:textColor="@color/label_gray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvPaceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.3x"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBarPace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="15"
+            android:progress="8"
+            android:progressTint="@color/primary_cyan"
+            android:thumbTint="@color/primary_cyan"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Test Voice -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTestVoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Test Voice"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/secondary_purple"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_volume_on"
+            app:iconGravity="textStart"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvVoiceTestResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/hint_gray"
+            android:textSize="13sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- ==================== System Prompt Section ==================== -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_dark"
+            android:layout_marginBottom="24dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,8 +262,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="System Prompt"
-                android:textColor="@color/label_gray"
-                android:textSize="14sp" />
+                android:textColor="@color/primary_cyan"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/btnResetPrompt"
@@ -147,8 +299,11 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             app:backgroundTint="@color/primary_cyan"
-            app:cornerRadius="12dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto" />
+            app:cornerRadius="12dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
 
     </LinearLayout>
 </ScrollView>
