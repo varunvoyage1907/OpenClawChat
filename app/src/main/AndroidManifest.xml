@@ -8,6 +8,16 @@
     
     <!-- Audio for voice input -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    
+    <!-- Bluetooth for Smart Glasses -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
 
     <application
         android:name=".ChatApplication"
@@ -35,6 +45,20 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:parentActivityName=".ui.MainActivity" />
+        
+        <activity
+            android:name=".ui.GlassesScanActivity"
+            android:parentActivityName=".ui.SettingsActivity" />
+        
+        <!-- Glasses SDK Bluetooth Receiver -->
+        <receiver
+            android:name=".glasses.GlassesBluetoothReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

@@ -30,6 +30,36 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- Glasses Status Indicator -->
+        <LinearLayout
+            android:id="@+id/glassesIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_marginEnd="8dp"
+            android:padding="4dp">
+
+            <View
+                android:id="@+id/viewGlassesIndicator"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/status_indicator_connected" />
+
+            <TextView
+                android:id="@+id/tvGlassesName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Glasses"
+                android:textColor="@color/hint_gray"
+                android:textSize="11sp"
+                android:maxWidth="80dp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+        </LinearLayout>
+
         <ImageButton
             android:id="@+id/btnToggleTts"
             android:layout_width="40dp"
@@ -69,6 +99,40 @@
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@id/inputContainer"
         app:layout_constraintTop_toBottomOf="@id/header" />
+
+    <!-- Captured Image Preview -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardImagePreview"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@id/inputContainer"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivCapturedImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <ImageButton
+                android:id="@+id/btnRemoveImage"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="4dp"
+                android:background="@drawable/bg_close_button"
+                android:src="@drawable/ic_close"
+                app:tint="@color/white" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- Listening indicator -->
     <TextView
@@ -122,6 +186,17 @@
             android:background="@drawable/bg_voice_button"
             android:contentDescription="Voice input"
             android:src="@drawable/ic_mic"
+            app:tint="@color/white" />
+
+        <!-- Camera button for glasses image capture -->
+        <ImageButton
+            android:id="@+id/btnCamera"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_voice_button"
+            android:contentDescription="Capture image from glasses"
+            android:src="@drawable/ic_camera"
+            android:visibility="gone"
             app:tint="@color/white" />
 
         <EditText

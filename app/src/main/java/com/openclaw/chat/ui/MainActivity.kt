@@ -3,6 +3,7 @@ package com.openclaw.chat.ui
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -19,10 +20,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclaw.chat.R
 import com.openclaw.chat.databinding.ActivityMainBinding
+import com.openclaw.chat.glasses.GlassesManager
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -80,6 +84,11 @@ class MainActivity : AppCompatActivity() {
     // Input source tracking
     private var lastInputSource = "Chat"
     
+    // Glasses manager
+    private lateinit var glassesManager: GlassesManager
+    private var glassesConnectedNotified = false
+    private var pendingImageData: ByteArray? = null
+    
     // HTTP Client for Sarvam API
     private val sarvamClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -105,8 +114,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        glassesManager = GlassesManager.getInstance(this)
+        glassesManager.initialize()
+        
         loadSarvamSettings()
         setupUI()
+        setupGlasses()
+        observeGlassesState()
         checkPermissions()
         connectWebSocket()
     }
@@ -124,6 +138,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadSarvamSettings()
+        glassesManager.updateContext(this)
+        updateGlassesUI()
     }
     
     override fun onDestroy() {
@@ -611,9 +627,20 @@ class MainActivity : AppCompatActivity() {
         
         binding.etMessage.setText("")
         
-        val prefixedText = "[Android:$lastInputSource] $text"
+        // Check if we have a pending image
+        val hasImage = pendingImageData != null
+        val imageData = pendingImageData
         
-        val userMessage = ChatMessage(text, true, System.currentTimeMillis())
+        // Build the message with image indication if present
+        val prefixedText = if (hasImage) {
+            "[Android:$lastInputSource:IMAGE] $text"
+        } else {
+            "[Android:$lastInputSource] $text"
+        }
+        
+        // Show user message with image indication
+        val displayText = if (hasImage) "📷 $text" else text
+        val userMessage = ChatMessage(displayText, true, System.currentTimeMillis())
         messages.add(userMessage)
         chatAdapter.notifyItemInserted(messages.size - 1)
         scrollToBottom()
@@ -632,18 +659,33 @@ class MainActivity : AppCompatActivity() {
         // Clear TTS tracking for new response
         queuedSentences.clear()
         
-        // Send via WebSocket with correct format
+        // Build message params
+        val params = JSONObject().apply {
+            put("sessionKey", "agent:main:main")
+            put("message", prefixedText)
+            put("idempotencyKey", UUID.randomUUID().toString())
+            
+            // If we have an image, include it as base64
+            if (hasImage && imageData != null) {
+                val base64Image = Base64.encodeToString(imageData, Base64.NO_WRAP)
+                put("image", JSONObject().apply {
+                    put("data", base64Image)
+                    put("mimeType", "image/jpeg")
+                })
+            }
+        }
+        
+        // Send via WebSocket
         val chatMsg = JSONObject().apply {
             put("type", "req")
             put("id", "chat-${System.currentTimeMillis()}")
             put("method", "chat.send")
-            put("params", JSONObject().apply {
-                put("sessionKey", "agent:main:main")
-                put("message", prefixedText)
-                put("idempotencyKey", UUID.randomUUID().toString())
-            })
+            put("params", params)
         }
         webSocket?.send(chatMsg.toString())
+        
+        // Clear the pending image after sending
+        clearPendingImage()
     }
     
     // Track sentences already queued for TTS to avoid duplicates during streaming
@@ -906,6 +948,144 @@ class MainActivity : AppCompatActivity() {
     
     private fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    
+    // ==================== Glasses Integration ====================
+    
+    private fun setupGlasses() {
+        // Camera button for capturing images from glasses
+        binding.btnCamera.setOnClickListener {
+            captureImageFromGlasses()
+        }
+        
+        // Remove pending image
+        binding.btnRemoveImage.setOnClickListener {
+            clearPendingImage()
+        }
+        
+        // Wire up glasses callbacks
+        glassesManager.onImageReceived = { imageData ->
+            android.util.Log.d("OpenClawChat", "Image received from glasses: ${imageData.size} bytes")
+            runOnUiThread {
+                showCapturedImage(imageData)
+            }
+        }
+        
+        glassesManager.onError = { error ->
+            runOnUiThread {
+                toast("Glasses: $error")
+            }
+        }
+        
+        glassesManager.onMicrophoneActivated = {
+            android.util.Log.d("OpenClawChat", "Glasses microphone activated")
+            runOnUiThread {
+                // Could auto-start recording here if desired
+            }
+        }
+    }
+    
+    private fun observeGlassesState() {
+        lifecycleScope.launch {
+            glassesManager.connectionState.collectLatest { state ->
+                updateGlassesUI()
+                
+                // Send notification to OpenClaw when glasses connect
+                if (state == GlassesManager.ConnectionState.CONNECTED && !glassesConnectedNotified && isConnected) {
+                    glassesConnectedNotified = true
+                    notifyOpenClawGlassesConnected()
+                } else if (state == GlassesManager.ConnectionState.DISCONNECTED) {
+                    glassesConnectedNotified = false
+                }
+            }
+        }
+        
+        lifecycleScope.launch {
+            glassesManager.batteryLevel.collectLatest { battery ->
+                updateGlassesUI()
+            }
+        }
+    }
+    
+    private fun updateGlassesUI() {
+        val isGlassesConnected = glassesManager.isConnected()
+        val deviceName = glassesManager.connectedDeviceName.value
+        val battery = glassesManager.batteryLevel.value
+        
+        if (isGlassesConnected) {
+            binding.glassesIndicator.visibility = View.VISIBLE
+            binding.tvGlassesName.text = if (battery > 0) "$deviceName ($battery%)" else deviceName ?: "Glasses"
+            binding.viewGlassesIndicator.setBackgroundResource(R.drawable.status_indicator_connected)
+            binding.btnCamera.visibility = View.VISIBLE
+        } else {
+            binding.glassesIndicator.visibility = View.GONE
+            binding.btnCamera.visibility = View.GONE
+            clearPendingImage()
+        }
+    }
+    
+    private fun captureImageFromGlasses() {
+        if (!glassesManager.isConnected()) {
+            toast("Glasses not connected")
+            return
+        }
+        
+        toast("Capturing image...")
+        
+        glassesManager.captureAIPhoto(
+            onSuccess = {
+                runOnUiThread {
+                    binding.tvListening.text = "📷 Waiting for image..."
+                    binding.tvListening.visibility = View.VISIBLE
+                }
+            },
+            onFail = { error ->
+                runOnUiThread {
+                    binding.tvListening.visibility = View.GONE
+                    toast("Capture failed: $error")
+                }
+            }
+        )
+    }
+    
+    private fun showCapturedImage(imageData: ByteArray) {
+        pendingImageData = imageData
+        binding.tvListening.visibility = View.GONE
+        
+        val bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
+        if (bitmap != null) {
+            binding.ivCapturedImage.setImageBitmap(bitmap)
+            binding.cardImagePreview.visibility = View.VISIBLE
+            toast("Image captured! Send a message to analyze it")
+        } else {
+            toast("Failed to decode image")
+            clearPendingImage()
+        }
+    }
+    
+    private fun clearPendingImage() {
+        pendingImageData = null
+        binding.cardImagePreview.visibility = View.GONE
+        binding.ivCapturedImage.setImageBitmap(null)
+    }
+    
+    private fun notifyOpenClawGlassesConnected() {
+        val deviceName = glassesManager.connectedDeviceName.value ?: "Smart Glasses"
+        
+        // Send a system notification to OpenClaw (prefix with [SYSTEM:NO_REPLY] so it doesn't respond)
+        val notifyMsg = JSONObject().apply {
+            put("type", "req")
+            put("id", "notify-${System.currentTimeMillis()}")
+            put("method", "chat.send")
+            put("params", JSONObject().apply {
+                put("sessionKey", "agent:main:main")
+                put("message", "[SYSTEM:NO_REPLY] Smart glasses '$deviceName' connected. Vision capabilities now available. User can say 'capture image' or 'what do you see' to use glasses camera.")
+                put("idempotencyKey", UUID.randomUUID().toString())
+            })
+        }
+        webSocket?.send(notifyMsg.toString())
+        
+        android.util.Log.d("OpenClawChat", "Notified OpenClaw about glasses connection")
     }
 }
 

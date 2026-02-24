@@ -65,4 +65,10 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    
+    // Glasses SDK (Oudmon BLE)
+    implementation(files("libs/glasses_sdk_20250723_v01.aar"))
+    
+    // EventBus for BLE callbacks
+    implementation("org.greenrobot:eventbus:3.3.1")
 }

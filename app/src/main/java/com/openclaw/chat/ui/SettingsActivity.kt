@@ -1,5 +1,6 @@
 package com.openclaw.chat.ui
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Base64
@@ -8,10 +9,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.openclaw.chat.R
 import com.openclaw.chat.databinding.ActivitySettingsBinding
+import com.openclaw.chat.glasses.GlassesManager
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -90,6 +95,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var mediaPlayer: MediaPlayer? = null
+    private lateinit var glassesManager: GlassesManager
     
     private val httpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
@@ -100,15 +106,27 @@ class SettingsActivity : AppCompatActivity() {
     private var selectedLanguage = "hi-IN"
     private var speechPace = 1.3f
     
+    private val glassesScanLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            updateGlassesUI()
+        }
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        glassesManager = GlassesManager.getInstance(this)
+        
         setupSpinners()
         setupSeekBar()
         loadSettings()
         setupButtons()
+        setupGlasses()
+        observeGlassesState()
     }
     
     override fun onDestroy() {
@@ -402,6 +420,62 @@ class SettingsActivity : AppCompatActivity() {
                 file.delete()
             }
             start()
+        }
+    }
+    
+    private fun setupGlasses() {
+        binding.btnScanGlasses.setOnClickListener {
+            glassesScanLauncher.launch(Intent(this, GlassesScanActivity::class.java))
+        }
+        
+        binding.btnDisconnectGlasses.setOnClickListener {
+            glassesManager.disconnect()
+            Toast.makeText(this, "Disconnecting from glasses...", Toast.LENGTH_SHORT).show()
+        }
+        
+        updateGlassesUI()
+    }
+    
+    private fun observeGlassesState() {
+        lifecycleScope.launch {
+            glassesManager.connectionState.collectLatest { state ->
+                updateGlassesUI()
+            }
+        }
+        
+        lifecycleScope.launch {
+            glassesManager.batteryLevel.collectLatest { battery ->
+                if (battery > 0 && glassesManager.isConnected()) {
+                    binding.tvGlassesBattery.text = "$battery%"
+                    binding.tvGlassesBattery.visibility = View.VISIBLE
+                } else {
+                    binding.tvGlassesBattery.visibility = View.GONE
+                }
+            }
+        }
+    }
+    
+    private fun updateGlassesUI() {
+        val isConnected = glassesManager.isConnected()
+        val deviceName = glassesManager.connectedDeviceName.value
+        
+        if (isConnected && deviceName != null) {
+            binding.tvGlassesStatus.text = deviceName
+            binding.viewGlassesStatus.setBackgroundResource(R.drawable.status_indicator_connected)
+            binding.btnScanGlasses.text = "Connected"
+            binding.btnScanGlasses.isEnabled = false
+            binding.btnDisconnectGlasses.isEnabled = true
+            binding.btnDisconnectGlasses.alpha = 1.0f
+            binding.tvGlassesInfo.text = "Glasses connected and ready for image capture"
+        } else {
+            binding.tvGlassesStatus.text = "Not Connected"
+            binding.viewGlassesStatus.setBackgroundResource(R.drawable.status_indicator_disconnected)
+            binding.btnScanGlasses.text = "Scan"
+            binding.btnScanGlasses.isEnabled = true
+            binding.btnDisconnectGlasses.isEnabled = false
+            binding.btnDisconnectGlasses.alpha = 0.5f
+            binding.tvGlassesBattery.visibility = View.GONE
+            binding.tvGlassesInfo.text = "Tap Scan to find nearby glasses"
         }
     }
 }

@@ -243,6 +243,105 @@
             android:textSize="13sp"
             android:layout_marginBottom="24dp" />
 
+        <!-- ==================== Smart Glasses Section ==================== -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_dark"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Smart Glasses"
+            android:textColor="@color/primary_cyan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connect Oudmon/HeyCyan smart glasses for vision"
+            android:textColor="@color/hint_gray"
+            android:textSize="12sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Glasses Connection Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_input"
+            android:padding="14dp"
+            android:layout_marginBottom="16dp">
+
+            <View
+                android:id="@+id/viewGlassesStatus"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@drawable/status_indicator_disconnected" />
+
+            <TextView
+                android:id="@+id/tvGlassesStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:text="Not Connected"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvGlassesBattery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hint_gray"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Scan/Connect/Disconnect Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnScanGlasses"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Scan"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/secondary_purple"
+                app:cornerRadius="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDisconnectGlasses"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Disconnect"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/error_red"
+                app:cornerRadius="8dp"
+                android:enabled="false"
+                android:alpha="0.5" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvGlassesInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tap Scan to find nearby glasses"
+            android:textColor="@color/hint_gray"
+            android:textSize="12sp"
+            android:layout_marginBottom="24dp" />
+
         <!-- ==================== System Prompt Section ==================== -->
         <View
             android:layout_width="match_parent"
